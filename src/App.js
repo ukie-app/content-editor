@@ -4,6 +4,16 @@ import { Switch, Route } from 'react-router-dom'
 import List from './components/List'
 import Editor from './components/Editor'
 
+import firebase from './components/Firebase/firebase'
+
+const db = firebase.firestore()
+
+const courseRef = db.collection("course").get().then((querySnapshot) => {
+  querySnapshot.forEach((doc) => {
+    console.log(doc.id, "=>", doc.data());
+  });
+});
+
 function App() {
   return (
     <Switch>

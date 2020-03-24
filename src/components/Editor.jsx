@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { init } from 'pell'
 
+import firebase from './Firebase/firebase'
+
 import ParsedHtmlComponent from './ParsedHtmlComponent'
 
 import 'pell/dist/pell.css'
@@ -9,9 +11,15 @@ const exec = (command, value = null) => (
   document.execCommand(command, false, value)
 )
 
-const saveToDB = (html) => (
-  console.log("command saveToDB", html)
-)
+const saveToDB = (html) => {
+  const db = firebase.firestore()
+
+  const courseRef = db.collection("course").get().then((querySnapshot) => {
+    querySnapshot.forEach((doc) => {
+      console.log(`${doc.id} => ${doc.data()}`);
+    });
+  });
+}
 
 
 class Editor extends Component {
