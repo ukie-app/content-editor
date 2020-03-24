@@ -1,9 +1,18 @@
 import React from 'react'
 
-const List = () => {
+const List = ({match}) => {
+  console.log("here", match.params.lesson)
+
+
   return (
     <ul>
-      <li>List Item</li>
+      {
+        // courses.forEach((item, i) =>
+        //   console.log(courses[i])
+        //   // <li key={i}>{item}</li>
+        // )
+
+      }
     </ul>
   )
 }
