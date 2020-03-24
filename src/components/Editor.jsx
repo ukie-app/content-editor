@@ -7,26 +7,45 @@ import ParsedHtmlComponent from './ParsedHtmlComponent'
 
 import 'pell/dist/pell.css'
 
+const db = firebase.firestore()
+
 const exec = (command, value = null) => (
   document.execCommand(command, false, value)
 )
 
-const saveToDB = (html) => {
-  const db = firebase.firestore()
+const saveToDB = (lessonDoc, editorText) => {
+  const lessonRef = db.collection("lessons").doc(lessonDoc)
 
-  const courseRef = db.collection("course").get().then((querySnapshot) => {
-    querySnapshot.forEach((doc) => {
-      console.log(`${doc.id} => ${doc.data()}`);
-    });
-  });
+  lessonRef.update({text: editorText});
+  console.log("saved:", editorText)
+
 }
 
+function getFromDB (lessonDoc, state) {
+  const lessonRef = db.collection("lessons").doc(lessonDoc)
+  let getDoc = lessonRef.get()
+    .then(doc => {
+      if (!doc.exists) {
+        console.log('No such document!');
+      } else {
+        console.log('Document data:', doc.data().contentHtml);
+        let html = doc.data().contentHtml
+        state.setState({ html })
+        localStorage.setItem('content', JSON.stringify(html))
+        exec('insertHTML', html)
+      }
+    })
+    .catch(err => {
+      console.log('Error getting document', err);
+    });
+  }
 
 class Editor extends Component {
   editor = null
 
   constructor (props) {
     super(props)
+
     this.state = {
       html: localStorage.getItem('content'),
     }
@@ -38,7 +57,9 @@ class Editor extends Component {
       defaultParagraphSeparator: 'div',
       // document.getElementById('editor').content.innerHTML: localStorage.getItem('content')
       onChange: (html) => (
-        this.setState({ html }), localStorage.setItem('content', JSON.stringify(html))
+        this.setState({ html }),
+        localStorage.setItem('content', JSON.stringify(html))
+
       ),
       actions: [
         'bold',
@@ -46,7 +67,7 @@ class Editor extends Component {
           name: 'content',
           icon: '<b>C</b>',
           title: 'Get content',
-          result: () => exec('insertHTML', localStorage.getItem('content').replace(/"/g, ''))
+          result: () => getFromDB(this.props.match.params.lesson, this)
         },
         'underline',
         'italic',
@@ -66,7 +87,7 @@ class Editor extends Component {
           name: 'save',
           icon: '&#x1f4be;',
           title: 'Save to DB',
-          result: () => saveToDB(localStorage.getItem('content').replace(/"/g, ''))
+          result: () => saveToDB(this.props.match.params.lesson, localStorage.getItem('content').replace(/"/g, ''))
         },
         // 'code',
         // 'line',
@@ -83,6 +104,7 @@ class Editor extends Component {
   }
 
   render() {
+    console.log(this.state)
     return (
       <div className="lesson-editor">
         <h3>Editor:</h3>
