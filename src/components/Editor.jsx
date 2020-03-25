@@ -21,8 +21,7 @@ const saveToDB = (lessonDoc, editorText) => {
 }
 
 function getFromDB (lessonDoc, objRef) {
-  const lessonRef = db.collection("lessons").doc(lessonDoc)
-  let getDoc = lessonRef.get()
+  db.collection("lessons").doc(lessonDoc).get()
     .then(doc => {
       if (doc.exists) {
         // console.log('Document data:', doc.data().contentHtml)
@@ -59,11 +58,10 @@ class Editor extends Component {
       element: document.getElementById('editor'),
       defaultParagraphSeparator: 'div',
       // document.getElementById('editor').content.innerHTML: localStorage.getItem('content')
-      onChange: (html) => (
+      onChange: (html) => ((
         this.setState({ html }),
         localStorage.setItem('content', JSON.stringify(html))
-
-      ),
+      )),
       actions: [
         'bold',
         'underline',
@@ -103,14 +101,16 @@ class Editor extends Component {
     return (
       <div className="lesson-editor">
         <h3>Editor:</h3>
-        <div id="editor" className="pell">
-        </div>
+        
+        <div id="editor" className="pell"></div>
+
         <h3>HTML Output:</h3>
+
         <div id="html-output">
           <ParsedHtmlComponent html={this.state.html} />
         </div>
       </div>
-    );
+    )
   }
 }
 

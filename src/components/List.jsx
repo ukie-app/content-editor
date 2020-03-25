@@ -1,12 +1,9 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import firebase from './Firebase/firebase'
+import { withRouter } from "react-router";
 
 const db = firebase.firestore()
-
-// let lessonDoc = db.collection("lessons").doc("FegguLgwkBrcKJOA9lau").get().then(doc =>
-//   console.log(doc.data())  
-// )
 
 class List extends React.Component {
   constructor(props) {
@@ -16,54 +13,29 @@ class List extends React.Component {
       displayList: false,
       listItems: {},
     }
-
-    console.log("URL PARAM", this.props.match)
   }
-  
-
 
   componentDidMount() {
 
-    const { listTitle } = this.props
+    // get all courses from the database and
+    // store them in an object
+    var courses = {}
     var index = 0
+    db.collection("courses").get().then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        var newLesson = {
+          name: doc.data().name,
+          lessons: doc.data().lessons,
+          id: doc.id,
+        }
+        courses[index] = newLesson
+        index += 1
+      })
 
-    // If you run a query, you will be charged for any documents returned
-    // by that query, not the total number of documents in the collection.
-
-    // conditionally get different data from the database
-    if (listTitle === "Courses") {
-      var courses = {}
-       // get all courses from the database
-      const lessonRef = db.collection("courses").get().then((querySnapshot) => {
-        querySnapshot.forEach((doc) => {
-          // console.log(doc.id, "=>", doc.data().name);
-          var newLesson = {
-            name: doc.data().name,
-            lessons: doc.data().lessons,
-            id: doc.id,
-          }
-          courses[index] = newLesson
-          console.log("courses", courses)
-          index += 1
-        })
-        // after 450ms set state to the retrieved DB data
-        this.timer = setTimeout(this.displayListItems(courses), 450)
-       })
+      // after 450ms set state to the retrieved DB data
+      this.timer = setTimeout(this.displayListItems(courses), 450)
+    })
       
-      
-      // this.timer = setTimeout(this.displayListItems(courses), 100050)
-    }
-
-    else if (listTitle === "Lessons") {
-      var lessons = {}
-      // const urlParam = this.props.match.params
-
-      console.log("URL PARAM", this.props.match)
-      
-      let lessonDoc = db.collection("lessons").doc("FegguLgwkBrcKJOA9lau").get().then(doc =>
-        console.log(doc.data())  
-      )
-    }
   }
 
   componentWillUnmount() {
@@ -74,8 +46,7 @@ class List extends React.Component {
     this.setState({
       displayList: true,
       listItems: listItems,
-    }, () => console.log("change state", this.state))
-  
+    })
   }
 
 
@@ -88,32 +59,62 @@ class List extends React.Component {
       return <div>Loading...</div>
     }
 
-    return (
+    // conditionally render either a list of courses
+    // or a list of lessons
+    if (listTitle === "Courses") {
+      return (
         <div className="container m-4">
-        <h1 className="pb-4">{listTitle}</h1>
-        
+          <h1 className="pb-4">{listTitle}</h1>
           <ul>
             {
+              // iterate over courses stored in the state and display them
               Object.entries(listItems).map((listItem, i) => (
-                console.log("LI", listItem),
-                  <li key={i}>
-                    <Link
-                      className="text-blue-600"
-                      to={
-                        (listTitle === "Courses")
-                          ? listItem[1].id
-                          : "lessons/" + listItem[1].id
-                        }
-                    >
-                      {listItem[1].name}
-                    </Link>
-                  </li>
+                // set the link to have a trailing slash
+                <li key={i}>
+                  <Link
+                    className="text-blue-600"
+                    to={listItem[1].id + "/"}
+                  >
+                    {listItem[1].name}
+                  </Link>
+                </li>
               ))
             }
           </ul>
         </div>
-    )
+      )
+    }
+
+    else {
+
+      // retrieve from the state only the course that is currently in the url parameter
+      const currentCourse = Object.values(listItems).filter(listItem =>
+        listItem.id === this.props.match.params.course
+      )
+
+      return (
+        <div className="container m-4">
+          <h1 className="pb-4">{listTitle}</h1>
+          <ul>
+            {
+              // iterate over lessons of the current course and display them
+              Object.values(currentCourse[0].lessons).map((lesson, i) => (
+                <li key={i}>
+                  <Link
+                    className="text-blue-600"
+                    to={lesson.refLesson.id}
+                  >
+                    {lesson.name}
+                  </Link>
+                </li>  
+              ))
+            }
+          </ul>
+        </div>
+      )
+    }
+
   }
 }
 
-export default List
+export default withRouter(List)
