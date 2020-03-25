@@ -97,14 +97,13 @@ class Editor extends Component {
   }
 
   render() {
-    console.log(this.state)
     return (
-      <div className="lesson-editor">
-        <h3>Editor:</h3>
+      <div className="lesson-editor" style={{ margin: '20px' }}>
+        <h3>Editor</h3>
         
         <div id="editor" className="pell"></div>
 
-        <h3>HTML Output:</h3>
+        <h3 style={{ marginTop: '50px' }}>HTML Output</h3>
 
         <div id="html-output">
           <ParsedHtmlComponent html={this.state.html} />
