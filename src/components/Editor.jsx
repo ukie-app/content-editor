@@ -16,23 +16,26 @@ const exec = (command, value = null) => (
 const saveToDB = (lessonDoc, editorText) => {
   const lessonRef = db.collection("lessons").doc(lessonDoc)
 
-  lessonRef.update({text: editorText});
-  console.log("saved:", editorText)
-
+  lessonRef.update({contentHtml: editorText});
+  console.log("saved to DB:", editorText)
 }
 
-function getFromDB (lessonDoc, state) {
+function getFromDB (lessonDoc, objRef) {
   const lessonRef = db.collection("lessons").doc(lessonDoc)
   let getDoc = lessonRef.get()
     .then(doc => {
-      if (!doc.exists) {
-        console.log('No such document!');
-      } else {
-        console.log('Document data:', doc.data().contentHtml);
+      if (doc.exists) {
+        // console.log('Document data:', doc.data().contentHtml)
         let html = doc.data().contentHtml
-        state.setState({ html })
-        localStorage.setItem('content', JSON.stringify(html))
-        exec('insertHTML', html)
+        // update state, local storange and inner HTML of the editor
+        if (html) {
+          objRef.setState({ html })
+          localStorage.setItem('content', JSON.stringify(html))
+          objRef.editor.content.innerHTML = html
+        }
+        else {
+          objRef.editor.content.innerHTML = "<p>Start new lesson</p>"
+        }
       }
     })
     .catch(err => {
@@ -51,7 +54,7 @@ class Editor extends Component {
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.editor = init({
       element: document.getElementById('editor'),
       defaultParagraphSeparator: 'div',
@@ -63,12 +66,6 @@ class Editor extends Component {
       ),
       actions: [
         'bold',
-        {
-          name: 'content',
-          icon: '<b>C</b>',
-          title: 'Get content',
-          result: () => getFromDB(this.props.match.params.lesson, this)
-        },
         'underline',
         'italic',
         'strikethrough',
@@ -89,10 +86,6 @@ class Editor extends Component {
           title: 'Save to DB',
           result: () => saveToDB(this.props.match.params.lesson, localStorage.getItem('content').replace(/"/g, ''))
         },
-        // 'code',
-        // 'line',
-        // 'link',
-        // 'image',
       ],
       classes: {
         actionbar: 'pell-actionbar',
@@ -101,6 +94,8 @@ class Editor extends Component {
         selected: 'pell-button-selected',
       },
     })
+
+    getFromDB(this.props.match.params.lesson, this);
   }
 
   render() {

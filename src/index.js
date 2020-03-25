@@ -8,7 +8,6 @@ import App from './App'
 import './styles/compiled.css'
 
 ReactDOM.render(
-  
   <BrowserRouter>
       <App />
   </BrowserRouter>,
