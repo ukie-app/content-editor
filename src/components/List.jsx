@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import firebase from './Firebase/firebase'
 import { withRouter } from "react-router";
+import LessonForm from "./LessonForm"
+import CourseForm from "./CourseForm"
 
 const db = firebase.firestore()
 
@@ -35,7 +37,7 @@ class List extends React.Component {
       // after 450ms set state to the retrieved DB data
       this.timer = setTimeout(this.displayListItems(courses), 450)
     })
-      
+
   }
 
   componentWillUnmount() {
@@ -81,6 +83,7 @@ class List extends React.Component {
               ))
             }
           </ul>
+          <CourseForm/>
         </div>
       )
     }
@@ -106,10 +109,11 @@ class List extends React.Component {
                   >
                     {lesson.name}
                   </Link>
-                </li>  
+                </li>
               ))
             }
           </ul>
+          <LessonForm curCourse={this.props.match.params.course} />
         </div>
       )
     }

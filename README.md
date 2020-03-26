@@ -18,7 +18,7 @@ This repo is for editing Firebase content using a Rich Text Editor.
 
 
 ## Configuration
-The database credentials are stored in .env 
+The database credentials are stored in .env
 
 Only users who are given access to the database (through the Firebase Console) will be able to edit it.
 
@@ -28,5 +28,5 @@ If you run a query, you will be charged for any documents returned by that query
 
 
 ## To-do
-- [ ] Make a custom component for creating a new course
-- [ ] Make a custom component for creating a new lesson 
+- [x] Make a custom component for creating a new course
+- [x] Make a custom component for creating a new lesson 
