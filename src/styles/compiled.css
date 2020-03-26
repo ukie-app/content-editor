@@ -13228,6 +13228,42 @@ hr, .lesson-divider {
   height: 2px;
 }
 
+.btn-teal {
+  flex-shrink: 0;
+  background-color: #38b2ac;
+  border-color: #38b2ac;
+  font-size: 0.875rem;
+  border-width: 4px;
+  color: #fff;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.btn-teal:hover {
+  background-color: #2c7a7b;
+  border-color: #2c7a7b
+}
+
+.form-field {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  background-color: #edf2f7;
+  color: #4a5568;
+  border-radius: 0.25rem;
+  padding: 0.5rem;
+  line-height: 1.25
+}
+
+.form-field:focus {
+  outline: 0
+}
+
 .pell {
   border: 1px solid rgba(10, 10, 10, 0.1);
   box-sizing: border-box;

@@ -43,13 +43,30 @@ const CourseForm = () => {
     >
       {({ isSubmitting }) => (
         <Form>
-          <Field type="category" name="category" placeholder="Category"/>
-          <Field type="name" name="name" placeholder="Name"/>
-          <Field type="img" name="img" placeholder="img"/>
-          <Field type="lessons" name="lessons" placeholder="lessons"/>
-          <button type="submit" disabled={isSubmitting}>
-            Submit
-          </button>
+          <div className="flex flex-wrap -mx-3 mb-6">
+            <div className="w-1/3 px-3 mb-6 md:mb-0">
+              <Field type="category" name="category" placeholder="category" className="form-field" />
+            </div>
+
+            <div className="w-1/3 px-3">
+              <Field type="name" name="name" placeholder="name" className="form-field" />
+            </div>
+
+            <div className="w-1/3 px-3">
+              <Field type="img" name="img" placeholder="imgLink" className="form-field"/>
+            </div>
+
+            <div className="w-full px-3 pb-6">
+              <Field type="lessons" name="lessons" placeholder="array of new lessons separated by comma" className="w-full form-field" />
+            </div>
+
+            <button type="submit" className="btn-teal mx-auto" disabled={isSubmitting}>
+              Submit
+            </button>
+
+          </div>
+          
+         
         </Form>
       )}
     </Formik>
