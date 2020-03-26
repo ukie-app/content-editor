@@ -68,12 +68,30 @@ class Editor extends Component {
         'italic',
         'strikethrough',
         'paragraph',
+        {
+          name: 'div',
+          icon: '<b>DIV</b>',
+          title: 'Insert div',
+          result: () => exec('formatBlock', '<div>')
+        },
+        {
+          name: 'em dash',
+          icon: '<b>―</b>',
+          title: 'Insert Em Dash',
+          result: () => exec('insertText', '―')
+        },
         'heading1',
         {
           name: 'subtitle',
           icon: '<b>H<sub>3</sub></b>',
           title: 'Make subtitle',
           result: () => exec('formatBlock', '<h3>')
+        },
+        {
+          name: 'divider',
+          icon: '<b>hr</b>',
+          title: 'Insert divider',
+          result: () => exec('insertHtml', '<hr class="lesson-divider">')
         },
         'quote',
         'olist',
@@ -106,7 +124,8 @@ class Editor extends Component {
         <h3 style={{ marginTop: '50px' }}>HTML Output</h3>
 
         <div id="html-output">
-          <ParsedHtmlComponent html={this.state.html} />
+          {this.state.html}
+          {/* <ParsedHtmlComponent html={this.state.html} /> */}
         </div>
       </div>
     )

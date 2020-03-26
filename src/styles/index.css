@@ -22,8 +22,16 @@ p {
   @apply text-xl text-gray-800 mb-4;
 }
 
+hr {
+  border-top-width: 0;
+}
+
 @tailwind utilities;
 
+hr, .lesson-divider {
+  @apply bg-gray-200 mt-6 mb-8;
+  height: 2px;
+}
 
 .pell {
   border: 1px solid rgba(10, 10, 10, 0.1);
@@ -56,4 +64,3 @@ p {
 .pell-button-selected {
   background-color: #F0F0F0;
 }
-
