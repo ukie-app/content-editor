@@ -44,7 +44,7 @@ const CourseForm = () => {
       {({ isSubmitting }) => (
         <Form>
           <div className="flex flex-wrap -mx-3 mb-6">
-            <div className="w-1/3 px-3 mb-6 md:mb-0">
+            <div className="w-1/3 px-3 mb-6 mb-0">
               <Field type="category" name="category" placeholder="category" className="form-field" />
             </div>
 

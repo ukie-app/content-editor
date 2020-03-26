@@ -56,7 +56,7 @@ hr, .lesson-divider {
 
 .editor-content {
   box-sizing: border-box;
-  height: 300px;
+  height: auto;
   outline: 0;
   overflow-y: auto;
   padding: 10px;
