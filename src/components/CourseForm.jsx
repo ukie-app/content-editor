@@ -6,9 +6,9 @@ const CourseForm = () => {
   function lessonData(lessonsArr, setDoc, db, lessonDoc) {
     let newData = {
       name: lessonsArr,
-      refCourse: '/courses/'+setDoc.id
+      refCourse: '/courses/' + setDoc.id
     };
-    // Add a new document in collection "cities" with ID 'LA'
+    // Add a new document in collection courses with auto-generated ID
     lessonDoc.set(newData);
   }
   return (<div>
@@ -19,6 +19,7 @@ const CourseForm = () => {
           let data = {
             category: values.category,
             name: values.name,
+            description: values.description,
             img: values.img,
             lessons: []
           };
@@ -44,15 +45,19 @@ const CourseForm = () => {
       {({ isSubmitting }) => (
         <Form>
           <div className="flex flex-wrap -mx-3 mb-6">
-            <div className="w-1/3 px-3 mb-6 mb-0">
+            <div className="w-1/4 px-3 mb-6 mb-0">
               <Field type="category" name="category" placeholder="category" className="form-field" />
             </div>
 
-            <div className="w-1/3 px-3">
+            <div className="w-1/4 px-3">
               <Field type="name" name="name" placeholder="name" className="form-field" />
             </div>
 
-            <div className="w-1/3 px-3">
+            <div className="w-1/4 px-3">
+              <Field type="description" name="description" placeholder="description" className="form-field"/>
+            </div>
+
+            <div className="w-1/4 px-3">
               <Field type="img" name="img" placeholder="imgLink" className="form-field"/>
             </div>
 
@@ -65,8 +70,6 @@ const CourseForm = () => {
             </button>
 
           </div>
-          
-         
         </Form>
       )}
     </Formik>
