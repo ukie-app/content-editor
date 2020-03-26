@@ -97,7 +97,7 @@ class List extends React.Component {
 
       return (
         <div className="container m-4">
-          <h1 className="pb-4">{listTitle}</h1>
+          <h1 className="pb-4">{currentCourse[0].name + " " + listTitle}</h1>
           <ul>
             {
               // iterate over lessons of the current course and display them
