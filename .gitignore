@@ -23,6 +23,6 @@ yarn-debug.log*
 yarn-error.log*
 
 # raw tailwindCSS
-src/assets/styles/compiled.css
+src/styles/compiled.css
 
 ukie-test-645eb0f78aef.json
