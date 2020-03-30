@@ -21,4 +21,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# raw tailwindCSS
+src/assets/styles/compiled.css
+
 ukie-test-645eb0f78aef.json

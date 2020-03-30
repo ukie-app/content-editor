@@ -33,6 +33,7 @@ function getFromDB (lessonDoc, objRef) {
           objRef.editor.content.innerHTML = html
         }
         else {
+          localStorage.setItem('content', '')
           objRef.editor.content.innerHTML = "<p>Start new lesson</p>"
         }
       }
@@ -49,7 +50,7 @@ class Editor extends Component {
     super(props)
 
     this.state = {
-      html: localStorage.getItem('content'),
+      html: '',
     }
   }
 

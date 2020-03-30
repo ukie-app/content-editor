@@ -19,8 +19,8 @@ const LessonForm = ({curCourse}) => (
     >
       {({ isSubmitting }) => (
         <Form>
-          <Field type="name" name="name" />
-          <button type="submit" disabled={isSubmitting}>
+          <Field type="name" name="name" placeholder="lesson name" className="form-field"/>
+          <button className="btn-teal" type="submit" disabled={isSubmitting}>
             Submit
           </button>
         </Form>
