@@ -105,7 +105,7 @@ class List extends React.Component {
                 <li key={i}>
                   <Link
                     className="text-blue-600"
-                    to={lesson.refLesson.id}
+                    to={lesson.lessonRef.split('/')[1]}
                   >
                     {lesson.name}
                   </Link>
