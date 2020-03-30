@@ -22,7 +22,8 @@
     "start": "npx tailwindcss build src/styles/index.css -o src/styles/compiled.css & react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "updateDB": "node updateFirestore.js"
   },
   "eslintConfig": {
     "extends": "react-app"

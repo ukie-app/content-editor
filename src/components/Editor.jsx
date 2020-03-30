@@ -119,7 +119,7 @@ class Editor extends Component {
     return (
       <div className="lesson-editor" style={{ margin: '20px' }}>
         <h3>Editor</h3>
-        
+
         <div id="editor" className="pell"></div>
 
         <h3 style={{ marginTop: '50px' }}>HTML Output</h3>
