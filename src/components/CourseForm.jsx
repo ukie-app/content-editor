@@ -6,7 +6,7 @@ const CourseForm = () => {
   function lessonData(lessonsArr, setDoc, db, lessonDoc) {
     let newData = {
       name: lessonsArr,
-      refCourse: '/courses/' + setDoc.id
+      courseRef: '/courses/' + setDoc.id
     };
     // Add a new document in collection courses with auto-generated ID
     lessonDoc.set(newData);
@@ -32,7 +32,7 @@ const CourseForm = () => {
             setTimeout(lessonData(lessonsArr[i], setDoc, db, lessonDoc), 400)
             let tmpData = {
               name: lessonsArr[i],
-              refLesson: '/lessons/'+lessonDoc.id
+              lessonRef: '/lessons/'+lessonDoc.id
             };
             setDoc.update({
               lessons: firebase.firestore.FieldValue.arrayUnion(tmpData)

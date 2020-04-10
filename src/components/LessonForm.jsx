@@ -10,7 +10,7 @@ const LessonForm = ({curCourse}) => (
       onSubmit={(values, { setSubmitting }) => {
           let data = {
             name: values.name,
-            refCourse: '/courses/'+curCourse
+            courseRef: '/courses/'+curCourse
           };
           const db = firebase.firestore()
           db.collection('lessons').doc().set(data);
