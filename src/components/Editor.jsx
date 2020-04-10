@@ -11,36 +11,58 @@ import CustomParagraph from './plugins/CustomParagraph/CustomParagraph'
 import ParsedHtmlComponent from './ParsedHtmlComponent'
 const db = firebase.firestore()
 
-//
-// const saveToDB = (lessonDoc, editorText) => {
-//   const lessonRef = db.collection("lessons").doc(lessonDoc)
-//
-//   lessonRef.update({contentHtml: editorText});
-//   console.log("saved to DB:", editorText)
-// }
-//
-// function getFromDB(lessonDoc, objRef) {
-//   db.collection("lessons").doc(lessonDoc).get()
-//     .then(doc => {
-//       if (doc.exists) {
-//         // console.log('Document data:', doc.data().contentHtml)
-//         let html = doc.data().contentHtml
-//         // update state, local storange and inner HTML of the editor
-//         if (html) {
-//           objRef.setState({ html })
-//           localStorage.setItem('content', JSON.stringify(html))
-//           objRef.editor.content.innerHTML = html
-//         }
-//         else {
-//           localStorage.setItem('content', '')
-//           objRef.editor.content.innerHTML = "<p>Start new lesson</p>"
-//         }
-//       }
-//     })
-//     .catch(err => {
-//       console.log('Error getting document', err);
-//     });
-//   }
+
+const saveToDB = (lessonDoc, editorText) => {
+  const lessonRef = db.collection("lessons").doc(lessonDoc)
+
+  lessonRef.update({contentHtml: editorText});
+  console.log("saved to DB:", editorText)
+}
+
+function getFromDB (lessonDoc, thisObjRef) {
+
+  console.log("GET FROM DB | thisObjRef:", thisObjRef)
+  db.collection("lessons").doc(lessonDoc).get()
+    .then(doc => {
+      if (doc.exists) {
+        // console.log('Document data:', doc.data().contentHtml)
+        let jsonData = doc.data().jsonContent
+        let htmlData = doc.data().htmlContent
+        // update state, local storange and inner HTML of the editor
+        if (jsonData && htmlData) {
+          console.log("jsonData", jsonData)
+          // thisObjRef.setState({
+          //   jsonContent: jsonData,
+          //   htmlContent: htmlData,
+          // })
+          // localStorage.setItem('content', JSON.stringify(jsonData))
+          return jsonData
+        }
+        else {
+          // localStorage.setItem('content', '')
+          console.log("intitial data")
+          let initialData = {
+            "time" : 1550476186479,
+            "blocks": [
+              {
+                "type": "header",
+                "data": {
+                   "text": "Start a new lesson",
+                   "level": 2
+                }
+             },
+            ],
+            "version" : "2.8.1"
+          }
+          return initialData
+        }
+      }
+    })
+    .catch(err => {
+      console.log('Error getting document', err);
+    });
+  }
+
 
 class Editor extends Component {
   // editor = null
@@ -49,13 +71,30 @@ class Editor extends Component {
     super(props)
 
     this.state = {
-      html: '',
+      htmlContent: '',
+      jsonContent: '',
       editorInstance: null,
       rawOutputData: null
     }
   }
 
   componentDidMount() {
+
+    let jsonData = {}
+
+    async function getJsonData(lessonDoc) {
+      console.log('calling getJsonData')
+      jsonData = await getFromDB(lessonDoc)
+      console.log("jsonData after calling", jsonData)
+    }
+
+    
+    // getJsonData(this.props.match.params.lesson)
+
+    // setTimeout(jsonData = getFromDB(this.props.match.params.lesson), 450)
+
+    console.log("data", jsonData)
+
     const editor = new EditorJS({
       /**
        * Id of Element that should contain Editor instance
@@ -92,15 +131,15 @@ class Editor extends Component {
         },
       },
 
-      /**
-     * Previously saved data that should be rendered
-     */
-      data: {},
+      // /**
+      //  * Previously saved data that should be rendered
+      //  */
+      data: jsonData,
 
       /**
       * onReady callback
       */
-     onReady: () => {console.log('Editor.js is ready to work!')},
+     onReady: () => {console.log("Editor is ready")},
 
      /**
       * onChange callback
@@ -113,20 +152,38 @@ class Editor extends Component {
       editorInstance: editor
     })
 
+    // console.log("EDITOR", editor)
+    // editor.configuration.data = getFromDB(this.props.match.params.lesson, this)
 
+    // editor.isReady
+    //   .then(() => {
+        
+    //     setTimeout(getFromDB(this.props.match.params.lesson, editor), 450)
+        
+    //     console.log("updated editor data", editor.configuration.data)
+        
+    //     /** Do anything you need after editor initialization */
+    //   })
+    //   .catch((reason) => {
+    //     console.log(`Editor.js initialization failed because of ${reason}`)
+    //   });
+
+    
   }
 
   saveData = () => {
     this.state.editorInstance.save().then((outputData) => {
       console.log('Article data: ', outputData)
       this.setState({
-        rawOutputData: outputData
+        jsonContent: outputData
       })
       this.editorBlocksToJSX(outputData)
     }).catch((error) => {
       console.log('Saving failed: ', error)
     });
   }
+
+
 
   editorBlocksToJSX = (outputData) => {
     let result = ``;
@@ -161,10 +218,13 @@ class Editor extends Component {
             tableRows += `<tr>${tableCells}</tr>`
           }
           result += `<table><tbody>${tableRows}</tbody></table>`
+          break
+        default:
+          return null
      }
     }
 
-   console.log("Parsed", result)
+  //  console.log("Parsed", result)
    this.setState({
      html: result
    })
@@ -172,7 +232,7 @@ class Editor extends Component {
 
   render() {
 
-    console.log("STATE", this.state)
+    // console.log("STATE", this.state)
 
     return (
       <div className="lesson-editor" style={{ margin: '20px' }}>
@@ -181,14 +241,15 @@ class Editor extends Component {
         <div id="editor" className="pell"></div>
 
         <button
-          className="btn btn-green"
+          className="my-4 btn-teal"
           onClick={() => this.saveData()}
         >
           Save content
         </button>
 
-        <h3 style={{ marginTop: '50px' }}>HTML Output</h3>
-
+        <h3 style={{ marginTop: '30px' }}>
+          HTML Output
+        </h3>
         <div id="html-output">
           {this.state.html}
         </div>

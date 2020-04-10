@@ -1,12 +1,12 @@
 import React from 'react';
 import firebase from './Firebase/firebase'
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field } from 'formik'
 
 const LessonForm = ({curCourse}) => (
   <div>
     <h1>Create a new lesson</h1>
     <Formik
-      initialValues={{ name: ''}}
+      initialValues={{ name: '' }}
       onSubmit={(values, { setSubmitting }) => {
           let data = {
             name: values.name,
