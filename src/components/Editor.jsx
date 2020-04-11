@@ -2,11 +2,15 @@ import React, { Component } from 'react'
 
 import firebase from './Firebase/firebase'
 
+import JsxParser from 'react-jsx-parser'
+
 import EditorJS from '@editorjs/editorjs'
 import Header from '@editorjs/header'
 import List from '@editorjs/list'
 import Table from '@editorjs/table'
 import CustomParagraph from './plugins/CustomParagraph/CustomParagraph'
+
+import ReactHtmlParser from 'react-html-parser'
 
 const db = firebase.firestore()
 
@@ -106,23 +110,21 @@ const editorInstance = (thisObjRef, jsonData) => {
     data: jsonData,
 
     /**
-    * onReady callback
-    */
-    onReady: () => { console.log("Editor is ready") },
-
-    /**
       * onChange callback
       */
     onChange: () => { thisObjRef.saveData(thisObjRef) }
 
-  });
+  })
 
   thisObjRef.setState({
     jsonContent: jsonData,
     editorInstance: editor,
   })
-}
 
+  if (jsonData.size !== 0) {
+    thisObjRef.editorBlocksToJSX(jsonData)
+  }
+}
 
 
 class Editor extends Component {
@@ -138,7 +140,6 @@ class Editor extends Component {
   }
 
   
-
   componentDidMount() {
     let componentRef = this
 
@@ -151,7 +152,7 @@ class Editor extends Component {
     // initialize editor instance after database content was retrieved
     let editorTimer = setTimeout(function() {
       editorInstance(componentRef, jsonData)
-    }, 450)
+    }, 400)
 
   }
 
@@ -185,7 +186,7 @@ class Editor extends Component {
     for (let block of editorData.blocks) {
       switch (block.type) {
         case 'paragraph':
-          parsedResult += `<p class="lesson-paragraph">${block.data.text}</p>`
+          parsedResult += `<p>${block.data.text}</p>`
           break
         case 'header':
           parsedResult += `<h${block.data.level}>${block.data.text}</h${block.data.level}>`
@@ -225,12 +226,12 @@ class Editor extends Component {
  }
 
   render() {
-
+    console.log(this.state.jsxContent)
     return (
       <div className="lesson-editor" style={{ margin: '20px' }}>
         <h3>Editor</h3>
 
-        <div id="editor" className="pell"></div>
+        <div id="editor" className="editor"></div>
 
         <button
           className="my-4 btn-teal"
@@ -242,9 +243,10 @@ class Editor extends Component {
         <h3 style={{ marginTop: '30px' }}>
           HTML Output
         </h3>
-        <div id="html-output">
-          {this.state.jsxContent}
-        </div>
+          <div id="html-output" className="lesson">
+            <JsxParser jsx={this.state.jsxContent} />
+          </div>
+
       </div>
     )
   }
