@@ -74,7 +74,7 @@ class List extends React.Component {
                 // set the link to have a trailing slash
                 <li key={i}>
                   <Link
-                    className="text-blue-600"
+                    className="text-blue-600 text-2xl"
                     to={listItem[1].id + "/"}
                   >
                     {listItem[1].name}
@@ -104,7 +104,7 @@ class List extends React.Component {
               Object.values(currentCourse[0].lessons).map((lesson, i) => (
                 <li key={i}>
                   <Link
-                    className="text-blue-600"
+                    className="text-blue-600 text-2xl"
                     to={lesson.lessonRef.split('/')[1]}
                   >
                     {lesson.name}

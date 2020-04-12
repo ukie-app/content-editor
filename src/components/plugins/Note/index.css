@@ -1,0 +1,46 @@
+.cdx-note {
+  position: relative;
+}
+
+.cdx-note [contentEditable=true][data-placeholder]::before{
+  position: absolute;
+  content: attr(data-placeholder);
+  color: #707684;
+  font-weight: normal;
+  opacity: 0;
+}
+
+.cdx-note [contentEditable=true][data-placeholder]:empty::before {
+  opacity: 1;
+}
+
+.cdx-note [contentEditable=true][data-placeholder]:empty:focus::before {
+  opacity: 0;
+}
+
+
+.cdx-note::before {
+  content: '';
+  background-image: url("./svg/pencil.svg");
+  width: 18px;
+  height: 18px;
+  background-size: 18px 18px;
+  position: absolute;
+  margin-top: 12px;
+  left: -30px;
+}
+
+@media all and (max-width: 735px) {
+  .cdx-note::before {
+    display: none;
+  }
+}
+
+.cdx-note__message {
+  min-height: 85px;
+}
+
+.cdx-note__title,
+.cdx-note__type {
+  margin-bottom: 6px;
+}

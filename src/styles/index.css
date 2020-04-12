@@ -2,6 +2,13 @@
 
 @tailwind components;
 
+h1 {
+  @apply text-3xl font-semibold text-gray-800;
+}
+body {
+  background-color: #f7fafc;
+}
+
 @tailwind utilities;
 
 /* @import 'lesson.css'; */
@@ -28,9 +35,36 @@ hr, .lesson-divider {
 }
 
 .editor {
-  border: 1px solid rgba(10, 10, 10, 0.1);
-  box-sizing: border-box;
+  @apply bg-white shadow-sm rounded px-12 pt-6 pb-8 mb-4;
 }
+
+.ce-block__content,
+.ce-toolbar__content {
+  max-width: inherit;
+  margin: 0;
+}
+
+
+/* title */
+.ce-block__content h1 {
+  @apply text-3xl font-semibold text-gray-800;
+}
+
+/* subtitle */
+.ce-block__content h3 {
+  @apply text-xl text-gray-600 border-b-2 border-gray-200 mb-5 pb-2;
+}
+
+/* list */
+.ce-block__content ul {
+  @apply list-disc text-xl text-gray-800 ml-8 mb-4;
+}
+
+/* regular paragraph */
+.ce-paragraph {
+  @apply text-xl text-gray-800 mb-4;
+}
+
 
 /* Lesson styles */
 
@@ -52,4 +86,8 @@ hr, .lesson-divider {
 /* regular paragraph */
 .jsx-parser p {
   @apply text-xl text-gray-800 mb-4;
+}
+
+.note p {
+  @apply text-base text-gray-800;
 }

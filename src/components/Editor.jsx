@@ -8,9 +8,10 @@ import EditorJS from '@editorjs/editorjs'
 import Header from '@editorjs/header'
 import List from '@editorjs/list'
 import Table from '@editorjs/table'
-import CustomParagraph from './plugins/CustomParagraph/CustomParagraph'
 
-import ReactHtmlParser from 'react-html-parser'
+import AsideNote from './AsideNote'
+
+import Note from './plugins/Note'
 
 const db = firebase.firestore()
 
@@ -102,6 +103,12 @@ const editorInstance = (thisObjRef, jsonData) => {
         shortcut: 'ctrl+shift+t',
         inlineToolbar: true
       },
+      note: {
+        class: Note,
+        shortcut: 'ctrl+shift+n',
+        inlineToolbar: true
+
+      }
     },
 
     /**
@@ -214,6 +221,9 @@ class Editor extends Component {
           }
           parsedResult += `<table><tbody>${tableRows}</tbody></table>`
           break
+        case 'note':
+          parsedResult += `<AsideNote type="${block.data.type}" title="${block.data.title}" text="${block.data.text}" />`
+          break
         default:
           return null
      }
@@ -226,7 +236,9 @@ class Editor extends Component {
  }
 
   render() {
+
     console.log(this.state.jsxContent)
+
     return (
       <div className="lesson-editor" style={{ margin: '20px' }}>
         <h3>Editor</h3>
@@ -240,11 +252,14 @@ class Editor extends Component {
           Save content
         </button>
 
-        <h3 style={{ marginTop: '30px' }}>
-          HTML Output
+        <h3 style={{ margin: '30px 0' }}>
+          JSX Output
         </h3>
-          <div id="html-output" className="lesson">
-            <JsxParser jsx={this.state.jsxContent} />
+          <div id="html-output" className="lesson bg-white rounded px-8 pt-6 pb-8 mb-4">
+          <JsxParser
+            components={{ AsideNote }}
+            jsx={this.state.jsxContent}
+          />
           </div>
 
       </div>

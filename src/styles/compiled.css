@@ -619,6 +619,16 @@ video {
   }
 }
 
+h1 {
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+body {
+  background-color: #f7fafc;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -13228,8 +13238,57 @@ hr, .lesson-divider {
 }
 
 .editor {
-  border: 1px solid rgba(10, 10, 10, 0.1);
-  box-sizing: border-box;
+  background-color: #fff;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 0.25rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+  margin-bottom: 1rem;
+}
+
+.ce-block__content,
+.ce-toolbar__content {
+  max-width: inherit;
+  margin: 0;
+}
+
+/* title */
+
+.ce-block__content h1 {
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+/* subtitle */
+
+.ce-block__content h3 {
+  font-size: 1.25rem;
+  color: #718096;
+  border-bottom-width: 2px;
+  border-color: #edf2f7;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.5rem;
+}
+
+/* list */
+
+.ce-block__content ul {
+  list-style-type: disc;
+  font-size: 1.25rem;
+  color: #2d3748;
+  margin-left: 2rem;
+  margin-bottom: 1rem;
+}
+
+/* regular paragraph */
+
+.ce-paragraph {
+  font-size: 1.25rem;
+  color: #2d3748;
+  margin-bottom: 1rem;
 }
 
 /* Lesson styles */
@@ -13269,6 +13328,11 @@ hr, .lesson-divider {
   font-size: 1.25rem;
   color: #2d3748;
   margin-bottom: 1rem;
+}
+
+.note p {
+  font-size: 1rem;
+  color: #2d3748;
 }
 
 @media (min-width: 640px) {
