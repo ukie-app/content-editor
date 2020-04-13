@@ -224,9 +224,30 @@ export default class Note {
    */
    static get sanitize() {
      return {
-        type: {},
-        title: {},
-        text: {}
+        type: {
+          b: true,
+          br: true,
+          a: {
+            href: true
+          },
+          i: true
+        },
+        title: {
+          b: true,
+          br: true,
+          a: {
+            href: true
+          },
+          i: true
+        },
+        text: {
+          b: true,
+          br: true,
+          a: {
+            href: true
+          },
+          i: true
+        }
       };
   }
 }

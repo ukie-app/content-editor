@@ -11,7 +11,8 @@ import Table from '@editorjs/table'
 
 import AsideNote from './AsideNote'
 
-import Note from './plugins/Note'
+import Note from './plugins/note'
+import Highlight from './plugins/inline-highlight'
 
 const db = firebase.firestore()
 
@@ -107,7 +108,10 @@ const editorInstance = (thisObjRef, jsonData) => {
         class: Note,
         shortcut: 'ctrl+shift+n',
         inlineToolbar: true
-
+      },
+      highlight: {
+        class: Highlight,
+        inlineToolbar: true,
       }
     },
 
@@ -237,7 +241,7 @@ class Editor extends Component {
 
   render() {
 
-    console.log(this.state.jsxContent)
+    console.log(this.state.jsonContent)
 
     return (
       <div className="lesson-editor" style={{ margin: '20px' }}>
@@ -258,6 +262,8 @@ class Editor extends Component {
           <div id="html-output" className="lesson bg-white rounded px-8 pt-6 pb-8 mb-4">
           <JsxParser
             components={{ AsideNote }}
+            componentsOnly={ false }
+            showWarnings={ true }
             jsx={this.state.jsxContent}
           />
           </div>
