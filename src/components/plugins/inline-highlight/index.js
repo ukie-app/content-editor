@@ -23,7 +23,7 @@ class InlineHighlight {
    * @return {string}
    */
   get toolboxIcon() {
-    return '<svg width="19" height="13" viewBox="0 0 19 13" xmlns="http://www.w3.org/2000/svg"><path d="M60,10 C-10,0 -10,100 60,90" /></svg>';
+    return '<b class="tool-icon">L</b>'
   }
   /**
    * Get Toolbox settings
@@ -54,7 +54,7 @@ class InlineHighlight {
      *
      * @type {string}
      */
-    this.tag = 'span';
+    this.tag = 'SPAN';
 
     /**
      * CSS classes
@@ -187,7 +187,7 @@ class InlineHighlight {
    */
   static get sanitize() {
     return {
-      code: {
+      span: {
         class: InlineHighlight.CSS
       }
     };

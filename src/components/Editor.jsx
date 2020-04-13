@@ -10,9 +10,11 @@ import List from '@editorjs/list'
 import Table from '@editorjs/table'
 
 import AsideNote from './AsideNote'
+import InlineAudioPlayer from './InlineAudioPlayer'
 
 import Note from './plugins/note'
 import Highlight from './plugins/inline-highlight'
+import InlineAudio from './plugins/inline-audio'
 
 const db = firebase.firestore()
 
@@ -79,6 +81,8 @@ const editorInstance = (thisObjRef, jsonData) => {
     */
     autofocus: true,
 
+    logLevel: 'VERBOSE',
+
     /**
     * Available Tools list.
     * Pass Tool's class or Settings object for each Tool you want to use
@@ -112,6 +116,10 @@ const editorInstance = (thisObjRef, jsonData) => {
       highlight: {
         class: Highlight,
         inlineToolbar: true,
+      },
+      inlineAudio: {
+        class: InlineAudio,
+        inlineToolbar: false,
       }
     },
 
@@ -225,6 +233,9 @@ class Editor extends Component {
           }
           parsedResult += `<table><tbody>${tableRows}</tbody></table>`
           break
+        case 'inlineAudio':
+          parsedResult += `<InlineAudioPlayer audioSrc="${block.data.audioSrc}" text="${block.data.text}" />`
+          break
         case 'note':
           parsedResult += `<AsideNote type="${block.data.type}" title="${block.data.title}" text="${block.data.text}" />`
           break
@@ -261,7 +272,7 @@ class Editor extends Component {
         </h3>
           <div id="html-output" className="lesson bg-white rounded px-8 pt-6 pb-8 mb-4">
           <JsxParser
-            components={{ AsideNote }}
+            components={{ AsideNote, InlineAudioPlayer }}
             componentsOnly={ false }
             showWarnings={ true }
             jsx={this.state.jsxContent}
