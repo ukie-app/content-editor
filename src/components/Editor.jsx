@@ -15,6 +15,7 @@ import InlineAudioPlayer from './InlineAudioPlayer'
 import Note from './plugins/note'
 import Highlight from './plugins/inline-highlight'
 import InlineAudio from './plugins/inline-audio'
+import InlineParagraph from './plugins/inline-paragraph'
 
 const db = firebase.firestore()
 
@@ -27,16 +28,44 @@ const getFromDB = (thisObjRef) => {
     db.collection("lessons").doc(lessonDoc).get()
       .then(doc => {
         if (doc.exists) {
-
           let jsonData = doc.data().jsonContent
-
           // return jsonData if it's defined
           if (jsonData) {
-            resolve(jsonData)
+            let validJSONBlocks = []
+            let convertedTableContent = []
+
+            for (let block of jsonData.blocks) {
+              if (block.type === 'table') {
+                // convert table content Object into Array
+                console.log(block.data.content)
+                if (block.data.content) {
+                  convertedTableContent = {
+                    content: Object.values(block.data.content)
+                  }
+                }
+                // console.log("converted to ", convertedTableContent)
+                let convertedTableBlock = {
+                  type: 'table',
+                  data: convertedTableContent
+                }
+                validJSONBlocks.push(Object.assign({}, convertedTableBlock))
+              }
+              else {
+                validJSONBlocks.push(Object.assign({}, block))
+                // console.log("skipped", block, "and added to obj: ", validJSONBlocks)
+              }
+            }
+          
+            let blocksData = {
+              time: jsonData.time,
+              blocks: validJSONBlocks,
+              version: jsonData.version
+            }
+
+            resolve(blocksData)
           }
           // otherwise set initial data
           else {
-
             let initialData = {
               "time" : 1550476186479,
               "blocks": [{
@@ -60,9 +89,41 @@ const getFromDB = (thisObjRef) => {
 
 const saveToDB = (lessonDoc, editorData) => {
   const lessonRef = db.collection("lessons").doc(lessonDoc)
+  
+  // find table blocks in the json
+  // const tableBlocks = editorData.blocks.filter(block => block.type === 'table')
+  let validJSONBlocks = []
+  let convertedTableContent
+
+  for (let block of editorData.blocks) {
+    if (block.type === 'table') {
+      // convert table content Array into an Object
+      if (block.data.content) {
+        convertedTableContent = {
+          content: Object.assign({}, block.data.content)
+        }
+      }
+      // console.log("converted to ", convertedTableContent)
+      let convertedTableBlock = {
+        type: 'table',
+        data: convertedTableContent
+      }
+      validJSONBlocks.push(Object.assign({}, convertedTableBlock))
+    }
+    else {
+      validJSONBlocks.push(Object.assign({}, block))
+      // console.log("skipped", block, "and added to obj: ", validJSONBlocks)
+    }
+  }
+
+  let jsonData = {
+    time: editorData.time,
+    blocks: validJSONBlocks,
+    version: editorData.version
+  }
 
   lessonRef.update({
-    jsonContent: editorData
+    jsonContent: jsonData
   });
 
   console.log("saved to DB:", editorData)
@@ -119,7 +180,11 @@ const editorInstance = (thisObjRef, jsonData) => {
       },
       inlineAudio: {
         class: InlineAudio,
-        inlineToolbar: false,
+        inlineToolbar: true,
+      },
+      inlineParagraph: {
+        class: InlineParagraph,
+        inlineToolbar: true,
       }
     },
 
@@ -168,10 +233,11 @@ class Editor extends Component {
 
     let jsonData = getData(componentRef)
     
+    
     // initialize editor instance after database content was retrieved
     let editorTimer = setTimeout(function() {
       editorInstance(componentRef, jsonData)
-    }, 400)
+    }, 450)
 
   }
 
@@ -207,6 +273,9 @@ class Editor extends Component {
         case 'paragraph':
           parsedResult += `<p>${block.data.text}</p>`
           break
+        case 'inlineParagraph':
+          parsedResult += `<p className="inline">${block.data.text}</p>`
+          break
         case 'header':
           parsedResult += `<h${block.data.level}>${block.data.text}</h${block.data.level}>`
           break
@@ -227,9 +296,13 @@ class Editor extends Component {
           let tableRows = ''
           for (let row in block.data.content) {
             for (let col in block.data.content) {
-              tableCells += `<td>${block.data.content[row][col]}</td>`
+              if (block.data.content[row][col]) {
+                console.log("DEFINED", row, col)
+                tableCells += `<td>${block.data.content[row][col]}</td>`
+              }
             }
             tableRows += `<tr>${tableCells}</tr>`
+            tableCells = ''
           }
           parsedResult += `<table><tbody>${tableRows}</tbody></table>`
           break

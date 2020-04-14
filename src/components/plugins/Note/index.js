@@ -4,7 +4,6 @@
 /**
  * Import Tool's icon
  */
-// import ToolboxIcon from './svg/pencil.svg';
 
 require('./index.css').toString();
 

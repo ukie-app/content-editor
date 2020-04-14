@@ -3,12 +3,12 @@ import AudioPlayer from 'react-modular-audio-player'
 
 const InlineAudioPlayer = ({ audioSrc, text }) => {
 
-  console.log("RECEIVED PROPS: ", audioSrc, text)
+  // console.log("RECEIVED PROPS: ", audioSrc, text)
 
   let rearrangedPlayer = [
     {
       className: "letter-audio",
-      style: { cursor: "pointer" },
+      style: { color: "blue" },
       innerComponents: [
         {
           type: "play",
@@ -18,7 +18,7 @@ const InlineAudioPlayer = ({ audioSrc, text }) => {
   ]
 
   return (
-    <div className="flex flex-row">
+    <div className="inline-flex inline-highlight mb-4">
       <AudioPlayer
         audioFiles={[
           {
@@ -33,7 +33,7 @@ const InlineAudioPlayer = ({ audioSrc, text }) => {
         pauseIcon="https://image.flaticon.com/icons/svg/31/31002.svg"
         pauseHoverIcon="https://image.flaticon.com/icons/svg/31/31002.svg"
       />
-      <span className="inline-highlight">{text}</span>
+      <span >{text}</span>
     </div>
   )
 }

@@ -1,3 +1,12 @@
+.audio-player {
+  height: auto;
+  background-size: contain;
+  display: inline-flex !important;
+  flex-direction: row !important;
+  justify-content: center;
+  width: max-content !important;
+}
+
 @tailwind base;
 
 @tailwind components;
@@ -91,3 +100,4 @@ hr, .lesson-divider {
 .note p {
   @apply text-base text-gray-800;
 }
+
