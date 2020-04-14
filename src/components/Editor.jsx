@@ -298,13 +298,13 @@ class Editor extends Component {
             for (let col in block.data.content) {
               if (block.data.content[row][col]) {
                 console.log("DEFINED", row, col)
-                tableCells += `<td>${block.data.content[row][col]}</td>`
+                tableCells += `<td className="tc-table__cell p-2">${block.data.content[row][col]}</td>`
               }
             }
             tableRows += `<tr>${tableCells}</tr>`
             tableCells = ''
           }
-          parsedResult += `<table><tbody>${tableRows}</tbody></table>`
+          parsedResult += `<table className="tc-table my-4"><tbody>${tableRows}</tbody></table>`
           break
         case 'inlineAudio':
           parsedResult += `<InlineAudioPlayer audioSrc="${block.data.audioSrc}" text="${block.data.text}" />`

@@ -97,6 +97,14 @@ hr, .lesson-divider {
   @apply text-xl text-gray-800 mb-4;
 }
 
+/* table */
+.jsx-parser table {
+  width: 100%;
+  height: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
 .note p {
   @apply text-base text-gray-800;
 }
