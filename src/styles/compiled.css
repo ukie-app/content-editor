@@ -13341,6 +13341,15 @@ hr, .lesson-divider {
   margin-bottom: 1rem;
 }
 
+/* table */
+
+.jsx-parser table {
+  width: 100%;
+  height: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
 .note p {
   font-size: 1rem;
   color: #2d3748;

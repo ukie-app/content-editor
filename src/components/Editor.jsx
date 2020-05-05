@@ -8,6 +8,7 @@ import EditorJS from '@editorjs/editorjs'
 import Header from '@editorjs/header'
 import List from '@editorjs/list'
 import Table from '@editorjs/table'
+import Embed from '@editorjs/embed'
 
 import AsideNote from './AsideNote'
 import InlineAudioPlayer from './InlineAudioPlayer'
@@ -31,36 +32,8 @@ const getFromDB = (thisObjRef) => {
           let jsonData = doc.data().jsonContent
           // return jsonData if it's defined
           if (jsonData) {
-            let validJSONBlocks = []
-            let convertedTableContent = []
-
-            for (let block of jsonData.blocks) {
-              if (block.type === 'table') {
-                // convert table content Object into Array
-                console.log(block.data.content)
-                if (block.data.content) {
-                  convertedTableContent = {
-                    content: Object.values(block.data.content)
-                  }
-                }
-                // console.log("converted to ", convertedTableContent)
-                let convertedTableBlock = {
-                  type: 'table',
-                  data: convertedTableContent
-                }
-                validJSONBlocks.push(Object.assign({}, convertedTableBlock))
-              }
-              else {
-                validJSONBlocks.push(Object.assign({}, block))
-                // console.log("skipped", block, "and added to obj: ", validJSONBlocks)
-              }
-            }
           
-            let blocksData = {
-              time: jsonData.time,
-              blocks: validJSONBlocks,
-              version: jsonData.version
-            }
+            let blocksData = JSON.parse(jsonData)
 
             resolve(blocksData)
           }
@@ -116,11 +89,7 @@ const saveToDB = (lessonDoc, editorData) => {
     }
   }
 
-  let jsonData = {
-    time: editorData.time,
-    blocks: validJSONBlocks,
-    version: editorData.version
-  }
+  let jsonData = JSON.stringify(editorData)
 
   lessonRef.update({
     jsonContent: jsonData
@@ -169,6 +138,10 @@ const editorInstance = (thisObjRef, jsonData) => {
         shortcut: 'ctrl+shift+t',
         inlineToolbar: true
       },
+      embed: {
+        class: Embed,
+        inlineToolbar: true
+      },
       note: {
         class: Note,
         shortcut: 'ctrl+shift+n',
@@ -205,7 +178,7 @@ const editorInstance = (thisObjRef, jsonData) => {
     editorInstance: editor,
   })
 
-  if (jsonData.size !== 0) {
+  if (jsonData.length !== 0) {
     thisObjRef.editorBlocksToJSX(jsonData)
   }
 }
@@ -297,7 +270,6 @@ class Editor extends Component {
           for (let row in block.data.content) {
             for (let col in block.data.content) {
               if (block.data.content[row][col]) {
-                console.log("DEFINED", row, col)
                 tableCells += `<td className="tc-table__cell p-2">${block.data.content[row][col]}</td>`
               }
             }
@@ -317,7 +289,6 @@ class Editor extends Component {
      }
     }
 
-  //  console.log("Parsed", result)
    this.setState({
      jsxContent: parsedResult
    })
@@ -325,7 +296,7 @@ class Editor extends Component {
 
   render() {
 
-    console.log(this.state.jsonContent)
+    console.log(this.state)
 
     return (
       <div className="lesson-editor" style={{ margin: '20px' }}>
