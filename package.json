@@ -6,7 +6,7 @@
     "@testing-library/jest-dom": "^5.1.1",
     "@testing-library/react": "^10.0.1",
     "@testing-library/user-event": "^10.0.0",
-    "firebase": "^7.12.0",
+    "firebase": "^10.9.0",
     "firebase-admin": "^8.10.0",
     "formik": "^2.1.4",
     "pell": "^1.0.6",
